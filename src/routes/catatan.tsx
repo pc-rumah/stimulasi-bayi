@@ -40,91 +40,112 @@ function CatatanPage() {
     <AppShell>
       <PageHeader title="Catatan Hari Ini" subtitle="Isi setelah stimulasi bersama Si Kecil" />
 
-      <main className="flex flex-col gap-4 px-4 pt-4 pb-6">
-        <Card>
-          <label className="text-sm font-extrabold text-secondary-foreground" htmlFor="minutes">
-            Durasi stimulasi (menit)
-          </label>
-          <input
-            id="minutes"
-            type="number"
-            min={0}
-            max={240}
-            value={minutes}
-            onChange={(e) => setMinutes(Number(e.target.value))}
-            className="mt-2 w-full rounded-2xl bg-secondary px-4 py-3 text-sm font-bold outline-none focus:ring-2 focus:ring-ring"
-          />
+      <main className="flex flex-col gap-5 px-4 md:px-8 pt-4 pb-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+          <Card className="md:col-span-7">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-extrabold text-secondary-foreground" htmlFor="minutes">
+                  Durasi stimulasi (menit)
+                </label>
+                <input
+                  id="minutes"
+                  type="number"
+                  min={0}
+                  max={240}
+                  value={minutes}
+                  onChange={(e) => setMinutes(Number(e.target.value))}
+                  className="mt-2 w-full rounded-2xl bg-secondary px-4 py-3 text-sm font-bold outline-none focus:ring-2 focus:ring-ring"
+                />
+              </div>
 
-          <label
-            className="mt-4 block text-sm font-extrabold text-secondary-foreground"
-            htmlFor="words"
-          >
-            Jumlah kata / bunyi baru
-          </label>
-          <input
-            id="words"
-            type="number"
-            min={0}
-            max={100}
-            value={newWords}
-            onChange={(e) => setNewWords(Number(e.target.value))}
-            className="mt-2 w-full rounded-2xl bg-secondary px-4 py-3 text-sm font-bold outline-none focus:ring-2 focus:ring-ring"
-          />
+              <div>
+                <label
+                  className="text-sm font-extrabold text-secondary-foreground"
+                  htmlFor="words"
+                >
+                  Jumlah kata / bunyi baru
+                </label>
+                <input
+                  id="words"
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={newWords}
+                  onChange={(e) => setNewWords(Number(e.target.value))}
+                  className="mt-2 w-full rounded-2xl bg-secondary px-4 py-3 text-sm font-bold outline-none focus:ring-2 focus:ring-ring"
+                />
+              </div>
+            </div>
 
-          <p className="mt-4 text-sm font-extrabold text-secondary-foreground">Respons anak</p>
-          <div className="mt-2 grid grid-cols-2 gap-2">
-            {responses.map((r) => (
-              <button
-                key={r}
-                type="button"
-                onClick={() => setResponse(r)}
-                className={`rounded-full py-2 text-xs font-extrabold transition-colors ${
-                  response === r ? "bg-primary text-primary-foreground" : "bg-secondary text-primary"
-                }`}
-              >
-                {r}
-              </button>
-            ))}
+            <p className="mt-4 text-sm font-extrabold text-secondary-foreground">Respons anak</p>
+            <div className="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {responses.map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => setResponse(r)}
+                  className={`rounded-full py-2.5 text-xs font-extrabold transition-colors ${
+                    response === r ? "bg-primary text-primary-foreground shadow-sm" : "bg-secondary text-primary hover:bg-secondary/80"
+                  }`}
+                >
+                  {r}
+                </button>
+              ))}
+            </div>
+
+            <label
+              className="mt-4 block text-sm font-extrabold text-secondary-foreground"
+              htmlFor="note"
+            >
+              Catatan orang tua
+            </label>
+            <textarea
+              id="note"
+              rows={4}
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Contoh: hari ini Si Kecil menirukan kata 'mama'."
+              className="mt-2 w-full rounded-2xl bg-secondary px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+            />
+
+            <button
+              type="button"
+              onClick={() => {
+                saveLog({ date: today, minutes, newWords, response, note });
+                setSaved(true);
+              }}
+              className="brand-gradient mt-5 w-full rounded-full py-3.5 text-sm font-extrabold text-primary-foreground transition-transform hover:scale-[1.01]"
+            >
+              Simpan Catatan (+10 poin)
+            </button>
+            {saved ? (
+              <p className="mt-2 text-center text-xs font-bold text-success">
+                Catatan hari ini tersimpan 🎉
+              </p>
+            ) : null}
+          </Card>
+
+          <div className="md:col-span-5 flex flex-col gap-4">
+            <Card className="bg-tile-sky flex-1 flex flex-col justify-center">
+              <h2 className="text-base font-extrabold text-tile-sky-foreground">Ingat Ya!</h2>
+              <p className="mt-2 text-xs md:text-sm leading-relaxed text-foreground">
+                Stimulasi 10–15 menit setiap hari jauh lebih efektif untuk perkembangan bahasa anak daripada sesi panjang sekali seminggu.
+              </p>
+              <ul className="mt-4 space-y-2 text-xs text-foreground/80">
+                <li className="flex items-center gap-2">
+                  <span>✨</span> FOKUS pada kontak mata & respon
+                </li>
+                <li className="flex items-center gap-2">
+                  <span>🗣️</span> Gunakan kalimat singkat & jelas
+                </li>
+                <li className="flex items-center gap-2">
+                  <span>📚</span> Bacakan buku bergambar bersama
+                </li>
+              </ul>
+            </Card>
           </div>
-
-          <label
-            className="mt-4 block text-sm font-extrabold text-secondary-foreground"
-            htmlFor="note"
-          >
-            Catatan orang tua
-          </label>
-          <textarea
-            id="note"
-            rows={4}
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            placeholder="Contoh: hari ini Si Kecil menirukan kata 'mama'."
-            className="mt-2 w-full rounded-2xl bg-secondary px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring"
-          />
-
-          <button
-            type="button"
-            onClick={() => {
-              saveLog({ date: today, minutes, newWords, response, note });
-              setSaved(true);
-            }}
-            className="brand-gradient mt-4 w-full rounded-full py-3 text-sm font-extrabold text-primary-foreground"
-          >
-            Simpan Catatan (+10 poin)
-          </button>
-          {saved ? (
-            <p className="mt-2 text-center text-xs font-bold text-success">
-              Catatan hari ini tersimpan 🎉
-            </p>
-          ) : null}
-        </Card>
-
-        <Card className="bg-tile-sky">
-          <h2 className="text-sm font-extrabold text-tile-sky-foreground">Ingat ya</h2>
-          <p className="mt-1 text-xs leading-relaxed text-foreground">
-            Stimulasi 10–15 menit setiap hari lebih efektif daripada sesi panjang sekali seminggu.
-          </p>
-        </Card>
+        </div>
       </main>
 
       <BottomNav />

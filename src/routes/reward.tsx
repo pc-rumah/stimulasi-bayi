@@ -43,68 +43,73 @@ function RewardPage() {
   return (
     <AppShell>
       <PageHeader
-        title="Reward"
+        title="Reward & Pencapaian"
         subtitle="Motivasi untuk terus konsisten"
         illustration={<img src={trophy} alt="" className="w-full" />}
       />
 
-      <main className="flex flex-col gap-4 px-4 pt-4 pb-6">
-        <Card>
-          <div className="grid grid-cols-2 gap-3 text-center">
-            <div className="rounded-3xl bg-tile-cream p-3">
-              <p className="text-2xl font-extrabold text-tile-cream-foreground">{points}</p>
-              <p className="text-xs text-foreground">Total poin</p>
+      <main className="flex flex-col gap-5 px-4 md:px-8 pt-4 pb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <Card className="flex flex-col justify-between">
+            <div className="grid grid-cols-2 gap-3 text-center">
+              <div className="rounded-3xl bg-tile-cream p-4">
+                <p className="text-3xl font-extrabold text-tile-cream-foreground">{points}</p>
+                <p className="text-xs font-bold text-foreground">Total Poin</p>
+              </div>
+              <div className="rounded-3xl bg-tile-peach p-4">
+                <p className="text-3xl font-extrabold text-tile-peach-foreground">{streak}</p>
+                <p className="text-xs font-bold text-foreground">Hari Berturut-turut</p>
+              </div>
             </div>
-            <div className="rounded-3xl bg-tile-peach p-3">
-              <p className="text-2xl font-extrabold text-tile-peach-foreground">{streak}</p>
-              <p className="text-xs text-foreground">Hari berturut-turut</p>
+            <div className="mt-4">
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>Progress Poin</span>
+                <span>{points} / {rewardGoal} pt</span>
+              </div>
+              <div className="mt-2 h-3.5 overflow-hidden rounded-full bg-secondary">
+                <div className="brand-gradient h-full rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
+              </div>
             </div>
-          </div>
-          <p className="mt-3 text-xs text-muted-foreground">
-            {points} / {rewardGoal} poin menuju level berikutnya
-          </p>
-          <div className="mt-2 h-3 overflow-hidden rounded-full bg-secondary">
-            <div className="brand-gradient h-full rounded-full" style={{ width: `${progress}%` }} />
-          </div>
-        </Card>
+          </Card>
+
+          <Card className="flex flex-col justify-between">
+            <h2 className="text-base md:text-lg font-extrabold text-secondary-foreground">Aktivitas Minggu Ini</h2>
+            <ul className="mt-4 grid grid-cols-7 gap-2 text-center">
+              {week.map((date, i) => (
+                <li key={date}>
+                  <span
+                    className={`grid aspect-square place-items-center rounded-2xl text-base font-extrabold shadow-xs ${
+                      done.has(date)
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-secondary text-muted-foreground"
+                    }`}
+                  >
+                    {done.has(date) ? "★" : "·"}
+                  </span>
+                  <span className="mt-1.5 block text-xs font-bold text-muted-foreground">
+                    {dayLabels[i]}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </div>
 
         <Card>
-          <h2 className="text-base font-extrabold text-secondary-foreground">Minggu Ini</h2>
-          <ul className="mt-3 grid grid-cols-7 gap-1.5 text-center">
-            {week.map((date, i) => (
-              <li key={date}>
-                <span
-                  className={`grid aspect-square place-items-center rounded-2xl text-sm font-extrabold ${
-                    done.has(date)
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-secondary text-muted-foreground"
-                  }`}
-                >
-                  {done.has(date) ? "★" : "·"}
-                </span>
-                <span className="mt-1 block text-[0.6rem] text-muted-foreground">
-                  {dayLabels[i]}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </Card>
-
-        <Card>
-          <h2 className="text-base font-extrabold text-secondary-foreground">Badge Pencapaian</h2>
-          <ul className="mt-3 grid grid-cols-2 gap-3">
+          <h2 className="text-base md:text-lg font-extrabold text-secondary-foreground">Badge Pencapaian</h2>
+          <ul className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
             {badges.map((b) => {
               const isOpen = unlocked.includes(b.id);
               return (
                 <li
                   key={b.id}
-                  className={`rounded-3xl p-3 text-center ${
-                    isOpen ? "bg-tile-mint" : "bg-secondary opacity-70"
+                  className={`tile-hover rounded-3xl p-4 text-center ${
+                    isOpen ? "bg-tile-mint shadow-sm" : "bg-secondary/60 opacity-60"
                   }`}
                 >
-                  <p className="text-2xl">{isOpen ? b.emoji : "🔒"}</p>
-                  <p className="mt-1 text-xs font-extrabold text-secondary-foreground">{b.name}</p>
-                  <p className="text-[0.65rem] text-muted-foreground">{b.requirement}</p>
+                  <p className="text-3xl md:text-4xl">{isOpen ? b.emoji : "🔒"}</p>
+                  <p className="mt-2 text-xs md:text-sm font-extrabold text-secondary-foreground">{b.name}</p>
+                  <p className="mt-0.5 text-[0.7rem] text-muted-foreground">{b.requirement}</p>
                 </li>
               );
             })}
@@ -112,8 +117,8 @@ function RewardPage() {
         </Card>
 
         <Card className="bg-tile-sky">
-          <p className="text-xs leading-relaxed text-foreground">
-            Poin bertambah 10 setiap catatan harian tersimpan dan 20 setiap skrining selesai.
+          <p className="text-xs md:text-sm leading-relaxed text-foreground">
+            💡 Poin bertambah 10 setiap kali catatan harian tersimpan dan 20 poin setiap kali skrining KPSP selesai.
           </p>
         </Card>
       </main>

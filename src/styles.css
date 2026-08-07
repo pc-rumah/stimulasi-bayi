@@ -204,6 +204,15 @@
   background-image: var(--gradient-brand);
 }
 
+.tile-hover {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tile-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -10px oklch(0.53 0.245 295 / 0.3);
+}
+
 @media print {
   .no-print {
     display: none !important;
@@ -212,9 +221,11 @@
   .print-area {
     box-shadow: none !important;
     max-width: none !important;
+    padding: 0 !important;
   }
 
   body {
     background: white !important;
   }
 }
+

@@ -79,10 +79,12 @@ function SkriningPage() {
         subtitle="Berdasarkan KPSP & Stimulasi Kemenkes RI"
       />
 
-      <main className="flex flex-col gap-4 px-4 pt-4 pb-6">
+      <main className="flex flex-col gap-5 px-4 md:px-8 pt-4 pb-6">
         <Card>
-          <h2 className="text-sm font-extrabold text-secondary-foreground">Pilih Usia Anak</h2>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <h2 className="text-sm md:text-base font-extrabold text-secondary-foreground">
+            Pilih Usia Anak
+          </h2>
+          <p className="mt-1 text-xs md:text-sm text-muted-foreground">
             {months === null
               ? "Isi tanggal lahir di Profil agar usia terpilih otomatis."
               : `Usia Si Kecil saat ini ${months} bulan.`}
@@ -93,10 +95,10 @@ function SkriningPage() {
                 key={s.age}
                 type="button"
                 onClick={() => pickAge(s.age)}
-                className={`rounded-full px-3 py-1.5 text-xs font-extrabold transition-colors ${
+                className={`rounded-full px-3.5 py-1.5 text-xs md:text-sm font-extrabold transition-colors ${
                   s.age === age
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-primary-soft text-primary"
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-primary-soft text-primary hover:bg-primary/20"
                 }`}
               >
                 {s.age} bln
@@ -106,28 +108,38 @@ function SkriningPage() {
         </Card>
 
         <Card>
-          <h2 className="text-sm font-extrabold text-secondary-foreground">{stage.label}</h2>
-          <ol className="mt-3 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-base md:text-lg font-extrabold text-secondary-foreground">
+              {stage.label}
+            </h2>
+            <span className="text-xs font-bold text-muted-foreground">
+              {Object.keys(answers).length} / {stage.questions.length} dijawab
+            </span>
+          </div>
+
+          <ol className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             {stage.questions.map((q, i) => (
-              <li key={q.id} className="rounded-3xl bg-secondary p-3">
-                <p className="text-sm leading-relaxed font-bold text-secondary-foreground">
-                  {i + 1}. {q.text}
-                </p>
-                {q.note ? (
-                  <p className="mt-1 text-[0.7rem] text-muted-foreground">{q.note}</p>
-                ) : null}
-                <div className="mt-3 flex gap-2">
+              <li key={q.id} className="flex flex-col justify-between rounded-3xl bg-secondary p-4">
+                <div>
+                  <p className="text-sm md:text-base leading-relaxed font-bold text-secondary-foreground">
+                    {i + 1}. {q.text}
+                  </p>
+                  {q.note ? (
+                    <p className="mt-1.5 text-xs text-muted-foreground">{q.note}</p>
+                  ) : null}
+                </div>
+                <div className="mt-4 flex gap-2">
                   {[true, false].map((val) => (
                     <button
                       key={String(val)}
                       type="button"
                       onClick={() => setAnswers((a) => ({ ...a, [q.id]: val }))}
-                      className={`flex-1 rounded-full py-2 text-xs font-extrabold transition-colors ${
+                      className={`flex-1 rounded-full py-2.5 text-xs font-extrabold transition-colors ${
                         answers[q.id] === val
                           ? val
-                            ? "bg-success text-success-foreground"
-                            : "bg-destructive text-destructive-foreground"
-                          : "bg-card text-muted-foreground"
+                            ? "bg-success text-success-foreground shadow-sm"
+                            : "bg-destructive text-destructive-foreground shadow-sm"
+                          : "bg-card text-muted-foreground hover:bg-card/80"
                       }`}
                     >
                       {val ? "Ya" : "Tidak"}
@@ -152,41 +164,51 @@ function SkriningPage() {
                 verdict: result.label,
               });
             }}
-            className="brand-gradient no-print mt-4 w-full rounded-full py-3 text-sm font-extrabold text-primary-foreground disabled:opacity-50"
+            className="brand-gradient no-print mt-5 w-full rounded-full py-3.5 text-sm font-extrabold text-primary-foreground disabled:opacity-50 transition-all hover:opacity-95"
           >
             {answeredAll ? "Lihat Hasil Skrining" : "Jawab semua pertanyaan dulu"}
           </button>
         </Card>
 
         {submitted ? (
-          <Card>
-            <div className={`rounded-3xl p-4 ${result.tone}`}>
-              <p className="text-xs font-bold uppercase opacity-80">Hasil Skrining</p>
-              <p className="mt-1 text-lg font-extrabold">{result.label}</p>
-              <p className="mt-1 text-xs">
-                Jawaban &quot;Ya&quot;: {yes} dari {stage.questions.length}
+          <Card className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <div className={`rounded-3xl p-5 ${result.tone}`}>
+                <p className="text-xs font-bold uppercase opacity-80">Hasil Skrining</p>
+                <p className="mt-1 text-xl font-extrabold">{result.label}</p>
+                <p className="mt-1 text-xs md:text-sm">
+                  Jawaban &quot;Ya&quot;: {yes} dari {stage.questions.length}
+                </p>
+              </div>
+              <p className="mt-4 text-xs md:text-sm leading-relaxed text-muted-foreground">
+                {result.advice}
               </p>
             </div>
-            <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{result.advice}</p>
-            <h3 className="mt-4 text-sm font-extrabold text-secondary-foreground">
-              Saran Stimulasi
-            </h3>
-            <ul className="mt-2 flex flex-col gap-2">
-              {stage.tips.map((tip) => (
-                <li key={tip} className="flex gap-2 text-xs leading-relaxed text-foreground">
-                  <span>💡</span>
-                  <span>{tip}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-4 flex flex-col gap-2">
-              <PrintButton label="Cetak Hasil Skrining" />
-              <Link
-                to="/riwayat"
-                className="no-print w-full rounded-full bg-primary-soft py-3 text-center text-sm font-extrabold text-primary"
-              >
-                Lihat Riwayat
-              </Link>
+
+            <div className="flex flex-col justify-between">
+              <div>
+                <h3 className="text-sm md:text-base font-extrabold text-secondary-foreground">
+                  Saran Stimulasi
+                </h3>
+                <ul className="mt-2 flex flex-col gap-2">
+                  {stage.tips.map((tip) => (
+                    <li key={tip} className="flex gap-2 text-xs md:text-sm leading-relaxed text-foreground">
+                      <span>💡</span>
+                      <span>{tip}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-5 flex flex-col sm:flex-row gap-2">
+                <PrintButton label="Cetak Hasil Skrining" />
+                <Link
+                  to="/riwayat"
+                  className="no-print w-full sm:w-auto shrink-0 rounded-full bg-primary-soft px-5 py-3 text-center text-sm font-extrabold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                >
+                  Lihat Riwayat
+                </Link>
+              </div>
             </div>
           </Card>
         ) : null}
