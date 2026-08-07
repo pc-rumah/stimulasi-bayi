@@ -17,12 +17,25 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
   }
 });
 
-// Start installs this automatically when src/start.ts is absent; defining the
-// file opts out, so re-add it explicitly to keep server functions protected
-// from cross-site requests.
-const csrfMiddleware = createCsrfMiddleware({
-  filter: (ctx) => ctx.handlerType === "serverFn",
+const defaultCsrfMiddleware = createMiddleware().server(async (ctx) => {
+  if ((ctx as any).handlerType === "serverFn") {
+    const origin = ctx.request.headers.get("Origin");
+    if (origin) {
+      const requestOrigin = new URL(ctx.request.url).origin;
+      if (origin !== requestOrigin) {
+        return new Response("Forbidden (CSRF)", { status: 403 });
+      }
+    }
+  }
+  return await ctx.next();
 });
+
+const csrfMiddleware =
+  typeof createCsrfMiddleware === "function"
+    ? createCsrfMiddleware({
+        filter: (ctx) => ctx.handlerType === "serverFn",
+      })
+    : defaultCsrfMiddleware;
 
 export const startInstance = createStart(() => ({
   requestMiddleware: [errorMiddleware, csrfMiddleware],
