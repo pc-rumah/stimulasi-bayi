@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell, BottomNav, Card, PageHeader } from "@/components/AppShell";
-import { todayKey, useSpeechPro, type DailyLog } from "@/lib/store";
+import { todayKey } from "@/lib/store";
+import { saveLogFn } from "@/lib/api";
 
-export const Route = createFileRoute("/catatan")({
+export const Route = createFileRoute("/_auth/catatan")({
   head: () => ({
     meta: [
       { title: "Catatan Perkembangan Harian — SpeechPro" },
@@ -24,17 +25,18 @@ export const Route = createFileRoute("/catatan")({
   component: CatatanPage,
 });
 
-const responses: DailyLog["response"][] = ["Kurang", "Cukup", "Baik", "Sangat Baik"];
+type Response = "Kurang" | "Cukup" | "Baik" | "Sangat Baik";
+const responses: Response[] = ["Kurang", "Cukup", "Baik", "Sangat Baik"];
 
 function CatatanPage() {
-  const { state, saveLog } = useSpeechPro();
   const today = todayKey();
-  const existing = state.logs.find((l) => l.date === today);
-  const [minutes, setMinutes] = useState(existing?.minutes ?? 15);
-  const [newWords, setNewWords] = useState(existing?.newWords ?? 0);
-  const [response, setResponse] = useState<DailyLog["response"]>(existing?.response ?? "Baik");
-  const [note, setNote] = useState(existing?.note ?? "");
+  const [minutes, setMinutes] = useState(15);
+  const [newWords, setNewWords] = useState(0);
+  const [response, setResponse] = useState<Response>("Baik");
+  const [note, setNote] = useState("");
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   return (
     <AppShell>
@@ -111,14 +113,24 @@ function CatatanPage() {
 
             <button
               type="button"
-              onClick={() => {
-                saveLog({ date: today, minutes, newWords, response, note });
-                setSaved(true);
+              disabled={saving}
+              onClick={async () => {
+                setSaving(true);
+                setError(null);
+                try {
+                  await saveLogFn({ data: { date: today, minutes, newWords, response, note } });
+                  setSaved(true);
+                } catch (err) {
+                  setError(err instanceof Error ? err.message : "Gagal menyimpan");
+                } finally {
+                  setSaving(false);
+                }
               }}
-              className="brand-gradient mt-5 w-full rounded-full py-3.5 text-sm font-extrabold text-primary-foreground transition-transform hover:scale-[1.01]"
+              className="brand-gradient mt-5 w-full rounded-full py-3.5 text-sm font-extrabold text-primary-foreground transition-transform hover:scale-[1.01] disabled:opacity-60"
             >
-              Simpan Catatan (+10 poin)
+              {saving ? "Menyimpan…" : "Simpan Catatan (+10 poin)"}
             </button>
+            {error && <p className="mt-2 text-center text-xs font-bold text-destructive">{error}</p>}
             {saved ? (
               <p className="mt-2 text-center text-xs font-bold text-success">
                 Catatan hari ini tersimpan 🎉

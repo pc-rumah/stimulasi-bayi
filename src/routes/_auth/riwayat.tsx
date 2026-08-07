@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, BottomNav, Card, PageHeader } from "@/components/AppShell";
 import { formatDate, useSpeechPro } from "@/lib/store";
 
-export const Route = createFileRoute("/riwayat")({
+export const Route = createFileRoute("/_auth/riwayat")({
   head: () => ({
     meta: [
       { title: "Riwayat Stimulasi & Skrining — SpeechPro" },

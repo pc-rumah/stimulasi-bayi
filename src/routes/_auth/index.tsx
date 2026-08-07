@@ -1,18 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { AppShell, BottomNav, Card, NotifBell } from "@/components/AppShell";
+import { MigrationBanner } from "@/components/MigrationBanner";
 import babyBlocks from "@/assets/baby-blocks.png";
-import {
-  ageInMonths,
-  bandForMonths,
-  computePoints,
-  computeStreak,
-  useSpeechPro,
-  weeklySummary,
-} from "@/lib/store";
+import { ageInMonths, bandForMonths, computeStreak, weeklySummary } from "@/lib/store";
 import { bandLabel } from "@/data/ages";
 import { latihanSheets } from "@/data/latihan";
+import { getUserProfileFn, getUserLogsFn, getUserScreeningsFn } from "@/lib/api";
+import type { DailyLog as DbLog } from "@/db/schema";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_auth/")({
   head: () => ({
     meta: [
       { title: "SpeechPro — Stimulasi Bahasa Anak 0–36 Bulan" },
@@ -80,24 +77,52 @@ const modules = [
 ] as const;
 
 function Beranda() {
-  const { state } = useSpeechPro();
-  const months = ageInMonths(state.profile.birthDate);
+  const [childName, setChildName] = useState("Si Kecil");
+  const [birthDate, setBirthDate] = useState("");
+  const [dbLogs, setDbLogs] = useState<DbLog[]>([]);
+  const [screeningCount, setScreeningCount] = useState(0);
+  const [dataKey, setDataKey] = useState(0); // refresh trigger
+
+  useEffect(() => {
+    getUserProfileFn().then((p) => {
+      if (p) {
+        setChildName(p.name);
+        setBirthDate(p.birthDate ?? "");
+      }
+    });
+    getUserLogsFn().then((logs) => setDbLogs(logs));
+    getUserScreeningsFn().then((s) => setScreeningCount(s.length));
+  }, [dataKey]);
+
+  const months = ageInMonths(birthDate);
   const band = bandForMonths(months);
-  const points = computePoints(state);
-  const streak = computeStreak(state.logs);
-  const summary = weeklySummary(state);
   const sheet = latihanSheets[band];
   const firstCategory = sheet.categories[0];
 
+  // Map DB logs → store format for streak/summary calculations
+  const storeLogs = dbLogs.map((l) => ({
+    date: l.date,
+    minutes: l.minutes,
+    newWords: l.newWords,
+    response: l.response as "Kurang" | "Cukup" | "Baik" | "Sangat Baik",
+    note: l.note ?? "",
+  }));
+
+  const points = storeLogs.length * 10 + screeningCount * 20;
+  const streak = computeStreak(storeLogs);
+  const summary = weeklySummary({ profile: { name: childName, birthDate }, logs: storeLogs, screenings: [], parentNote: "" });
+
   return (
     <AppShell>
+      <MigrationBanner onMigrated={() => setDataKey((k) => k + 1)} />
+
       <header className="header-wash relative overflow-hidden rounded-b-[2rem] md:rounded-2xl px-4 md:px-8 pt-5 pb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
           <div className="flex items-start justify-between md:block">
             <div className="min-w-0">
               <p className="text-xs font-bold tracking-wide text-primary uppercase">SpeechPro</p>
               <h1 className="mt-1 truncate text-2xl md:text-3xl font-extrabold text-foreground">
-                Hai, {state.profile.name || "Si Kecil"}!
+                Hai, {childName}!
               </h1>
               <p className="mt-1 text-xs md:text-sm text-muted-foreground">
                 {months === null
@@ -196,4 +221,3 @@ function Stat({ label, value, emoji }: { label: string; value: string | number; 
     </div>
   );
 }
-

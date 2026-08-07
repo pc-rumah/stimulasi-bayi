@@ -1,4 +1,4 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useRouteContext } from "@tanstack/react-router";
 import {
   Home,
   Clock,
@@ -14,10 +14,9 @@ import {
   Sparkles,
   Baby,
   Plus,
+  ShieldCheck,
 } from "lucide-react";
 import type { ReactNode } from "react";
-import { ageInMonths, bandForMonths, computePoints, useSpeechPro } from "@/lib/store";
-import { bandLabel } from "@/data/ages";
 
 const tabs = [
   { to: "/", label: "Beranda", icon: Home },
@@ -74,11 +73,9 @@ export function BottomNav() {
 }
 
 export function DesktopSidebar() {
-  const { state } = useSpeechPro();
+  const ctx = useRouteContext({ from: "__root__" });
+  const user = (ctx as { user?: { email: string; isAdmin: boolean } | null }).user;
   const location = useLocation();
-  const months = ageInMonths(state.profile.birthDate);
-  const band = bandForMonths(months);
-  const points = computePoints(state);
 
   return (
     <aside className="no-print hidden md:flex md:w-64 lg:w-72 shrink-0 flex-col border-r border-border bg-card p-4 min-h-screen sticky top-0 h-screen overflow-y-auto">
@@ -93,23 +90,22 @@ export function DesktopSidebar() {
         </div>
       </div>
 
-      {/* Profile Card */}
-      <div className="mt-4 rounded-2xl bg-secondary/70 p-3">
-        <div className="flex items-center justify-between gap-2">
-          <div className="min-w-0">
-            <p className="truncate text-xs font-bold text-muted-foreground">Si Kecil</p>
-            <p className="truncate text-sm font-extrabold text-foreground">
-              {state.profile.name || "Si Kecil"}
-            </p>
+      {/* User Card */}
+      {user && (
+        <div className="mt-4 rounded-2xl bg-secondary/70 p-3">
+          <div className="flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <p className="truncate text-xs font-bold text-muted-foreground">Masuk sebagai</p>
+              <p className="truncate text-sm font-extrabold text-foreground">{user.email}</p>
+            </div>
+            {user.isAdmin && (
+              <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[0.65rem] font-extrabold text-primary">
+                Admin
+              </span>
+            )}
           </div>
-          <span className="shrink-0 rounded-full bg-primary-soft px-2.5 py-1 text-[0.7rem] font-extrabold text-primary">
-            ⭐ {points} pt
-          </span>
         </div>
-        <p className="mt-1.5 text-[0.725rem] text-muted-foreground">
-          {months === null ? "Profil belum diisi" : `${months} bulan · ${bandLabel(band)}`}
-        </p>
-      </div>
+      )}
 
       {/* Quick Action Button */}
       <Link
@@ -127,7 +123,7 @@ export function DesktopSidebar() {
         </p>
         <ul className="mt-2 space-y-1">
           {navItems.map(({ to, label, icon: Icon }) => {
-            const isActive = location.pathname === to;
+            const isActive = location.pathname === to || (to !== "/" && location.pathname.startsWith(to));
             return (
               <li key={to}>
                 <Link
@@ -145,9 +141,25 @@ export function DesktopSidebar() {
             );
           })}
         </ul>
+
+        {/* Admin link */}
+        {user?.isAdmin && (
+          <div className="mt-4 pt-4 border-t border-border/60">
+            <p className="px-3 text-[0.65rem] font-extrabold uppercase tracking-wider text-muted-foreground mb-2">
+              Admin
+            </p>
+            <Link
+              to="/admin"
+              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-bold text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+            >
+              <ShieldCheck className="size-4 text-primary" />
+              Admin Dashboard
+            </Link>
+          </div>
+        )}
       </nav>
 
-      {/* Footer Info */}
+      {/* Footer */}
       <div className="mt-auto border-t border-border pt-3 px-2 text-[0.7rem] text-muted-foreground text-center">
         SpeechPro &copy; 2026 · Stimulasi 0-36 Bulan
       </div>

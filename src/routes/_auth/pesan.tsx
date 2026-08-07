@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, BottomNav, Card, PageHeader } from "@/components/AppShell";
 import { messages } from "@/data/reward";
 
-export const Route = createFileRoute("/pesan")({
+export const Route = createFileRoute("/_auth/pesan")({
   head: () => ({
     meta: [
       { title: "Pesan & Pengingat — SpeechPro" },

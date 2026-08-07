@@ -10,7 +10,7 @@ import {
   weekDates,
 } from "@/lib/store";
 
-export const Route = createFileRoute("/reward")({
+export const Route = createFileRoute("/_auth/reward")({
   head: () => ({
     meta: [
       { title: "Reward & Pencapaian — SpeechPro" },

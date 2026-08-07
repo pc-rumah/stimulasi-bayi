@@ -6,7 +6,7 @@ import { ageBands, bandLabel, type AgeBandId } from "@/data/ages";
 import { milestoneSheets } from "@/data/perkembangan";
 import { ageInMonths, bandForMonths, useSpeechPro } from "@/lib/store";
 
-export const Route = createFileRoute("/perkembangan")({
+export const Route = createFileRoute("/_auth/perkembangan")({
   head: () => ({
     meta: [
       { title: "Tahap Perkembangan Bahasa Anak — SpeechPro" },

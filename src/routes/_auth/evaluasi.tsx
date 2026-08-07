@@ -3,7 +3,7 @@ import { AppShell, BottomNav, Card, PageHeader, PrintButton } from "@/components
 import { bandForScore, weeklyRecommendations } from "@/data/evaluasi";
 import { useSpeechPro, weeklySummary, formatDate } from "@/lib/store";
 
-export const Route = createFileRoute("/evaluasi")({
+export const Route = createFileRoute("/_auth/evaluasi")({
   head: () => ({
     meta: [
       { title: "Evaluasi Mingguan — SpeechPro" },

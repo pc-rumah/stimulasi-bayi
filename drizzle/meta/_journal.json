@@ -8,6 +8,13 @@
       "when": 1786109551628,
       "tag": "0000_shallow_power_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1786112493837,
+      "tag": "0001_unknown_karnak",
+      "breakpoints": true
     }
   ]
 }

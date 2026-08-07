@@ -8,7 +8,7 @@ import {
   positiveActivities,
 } from "@/data/panduan";
 
-export const Route = createFileRoute("/panduan")({
+export const Route = createFileRoute("/_auth/panduan")({
   head: () => ({
     meta: [
       { title: "Panduan Orang Tua — SpeechPro" },

@@ -11,6 +11,18 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { getSessionFn } from "../lib/auth";
+
+export type AuthUser = {
+  id: string;
+  email: string;
+  isAdmin: boolean;
+} | null;
+
+export type RouterContext = {
+  queryClient: QueryClient;
+  user: AuthUser;
+};
 
 function NotFoundComponent() {
   return (
@@ -72,7 +84,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -101,6 +113,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
+  beforeLoad: async () => {
+    // Load session on every navigation — result flows into context
+    const user = await getSessionFn();
+    return { user };
+  },
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,

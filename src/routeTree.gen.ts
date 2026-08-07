@@ -9,118 +9,177 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as CatatanRouteImport } from './routes/catatan'
-import { Route as EvaluasiRouteImport } from './routes/evaluasi'
-import { Route as LatihanRouteImport } from './routes/latihan'
-import { Route as PanduanRouteImport } from './routes/panduan'
-import { Route as PerkembanganRouteImport } from './routes/perkembangan'
-import { Route as PesanRouteImport } from './routes/pesan'
-import { Route as ProfilRouteImport } from './routes/profil'
-import { Route as RewardRouteImport } from './routes/reward'
-import { Route as RiwayatRouteImport } from './routes/riwayat'
-import { Route as SkriningRouteImport } from './routes/skrining'
+import { Route as AdminRouteImport } from './routes/_admin'
+import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as AuthIndexRouteImport } from './routes/_auth/index'
+import { Route as AuthCatatanRouteImport } from './routes/_auth/catatan'
+import { Route as AuthEvaluasiRouteImport } from './routes/_auth/evaluasi'
+import { Route as AuthLatihanRouteImport } from './routes/_auth/latihan'
+import { Route as AuthPanduanRouteImport } from './routes/_auth/panduan'
+import { Route as AuthPerkembanganRouteImport } from './routes/_auth/perkembangan'
+import { Route as AuthPesanRouteImport } from './routes/_auth/pesan'
+import { Route as AuthProfilRouteImport } from './routes/_auth/profil'
+import { Route as AuthRewardRouteImport } from './routes/_auth/reward'
+import { Route as AuthRiwayatRouteImport } from './routes/_auth/riwayat'
+import { Route as AuthSkriningRouteImport } from './routes/_auth/skrining'
+import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin/index'
+import { Route as AdminAdminUsersRouteImport } from './routes/_admin/admin/users.'
+import { Route as AdminAdminUsersUserIdRouteImport } from './routes/_admin/admin/users.$userId'
 
-const IndexRoute = IndexRouteImport.update({
+const AdminRoute = AdminRouteImport.update({
+  id: '/_admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthIndexRoute = AuthIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
-const CatatanRoute = CatatanRouteImport.update({
+const AuthCatatanRoute = AuthCatatanRouteImport.update({
   id: '/catatan',
   path: '/catatan',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
-const EvaluasiRoute = EvaluasiRouteImport.update({
+const AuthEvaluasiRoute = AuthEvaluasiRouteImport.update({
   id: '/evaluasi',
   path: '/evaluasi',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
-const LatihanRoute = LatihanRouteImport.update({
+const AuthLatihanRoute = AuthLatihanRouteImport.update({
   id: '/latihan',
   path: '/latihan',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
-const PanduanRoute = PanduanRouteImport.update({
+const AuthPanduanRoute = AuthPanduanRouteImport.update({
   id: '/panduan',
   path: '/panduan',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
-const PerkembanganRoute = PerkembanganRouteImport.update({
+const AuthPerkembanganRoute = AuthPerkembanganRouteImport.update({
   id: '/perkembangan',
   path: '/perkembangan',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
-const PesanRoute = PesanRouteImport.update({
+const AuthPesanRoute = AuthPesanRouteImport.update({
   id: '/pesan',
   path: '/pesan',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
-const ProfilRoute = ProfilRouteImport.update({
+const AuthProfilRoute = AuthProfilRouteImport.update({
   id: '/profil',
   path: '/profil',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
-const RewardRoute = RewardRouteImport.update({
+const AuthRewardRoute = AuthRewardRouteImport.update({
   id: '/reward',
   path: '/reward',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
-const RiwayatRoute = RiwayatRouteImport.update({
+const AuthRiwayatRoute = AuthRiwayatRouteImport.update({
   id: '/riwayat',
   path: '/riwayat',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
-const SkriningRoute = SkriningRouteImport.update({
+const AuthSkriningRoute = AuthSkriningRouteImport.update({
   id: '/skrining',
   path: '/skrining',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
+} as any)
+const AdminAdminIndexRoute = AdminAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAdminUsersRoute = AdminAdminUsersRouteImport.update({
+  id: '/admin/users/',
+  path: '/admin/users/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAdminUsersUserIdRoute = AdminAdminUsersUserIdRouteImport.update({
+  id: '/admin/users/$userId',
+  path: '/admin/users/$userId',
+  getParentRoute: () => AdminRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/catatan': typeof CatatanRoute
-  '/evaluasi': typeof EvaluasiRoute
-  '/latihan': typeof LatihanRoute
-  '/panduan': typeof PanduanRoute
-  '/perkembangan': typeof PerkembanganRoute
-  '/pesan': typeof PesanRoute
-  '/profil': typeof ProfilRoute
-  '/reward': typeof RewardRoute
-  '/riwayat': typeof RiwayatRoute
-  '/skrining': typeof SkriningRoute
+  '/': typeof AuthIndexRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/catatan': typeof AuthCatatanRoute
+  '/evaluasi': typeof AuthEvaluasiRoute
+  '/latihan': typeof AuthLatihanRoute
+  '/panduan': typeof AuthPanduanRoute
+  '/perkembangan': typeof AuthPerkembanganRoute
+  '/pesan': typeof AuthPesanRoute
+  '/profil': typeof AuthProfilRoute
+  '/reward': typeof AuthRewardRoute
+  '/riwayat': typeof AuthRiwayatRoute
+  '/skrining': typeof AuthSkriningRoute
+  '/admin/': typeof AdminAdminIndexRoute
+  '/admin/users/': typeof AdminAdminUsersRoute
+  '/admin/users/$userId': typeof AdminAdminUsersUserIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/catatan': typeof CatatanRoute
-  '/evaluasi': typeof EvaluasiRoute
-  '/latihan': typeof LatihanRoute
-  '/panduan': typeof PanduanRoute
-  '/perkembangan': typeof PerkembanganRoute
-  '/pesan': typeof PesanRoute
-  '/profil': typeof ProfilRoute
-  '/reward': typeof RewardRoute
-  '/riwayat': typeof RiwayatRoute
-  '/skrining': typeof SkriningRoute
+  '/': typeof AuthIndexRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/catatan': typeof AuthCatatanRoute
+  '/evaluasi': typeof AuthEvaluasiRoute
+  '/latihan': typeof AuthLatihanRoute
+  '/panduan': typeof AuthPanduanRoute
+  '/perkembangan': typeof AuthPerkembanganRoute
+  '/pesan': typeof AuthPesanRoute
+  '/profil': typeof AuthProfilRoute
+  '/reward': typeof AuthRewardRoute
+  '/riwayat': typeof AuthRiwayatRoute
+  '/skrining': typeof AuthSkriningRoute
+  '/admin': typeof AdminAdminIndexRoute
+  '/admin/users': typeof AdminAdminUsersRoute
+  '/admin/users/$userId': typeof AdminAdminUsersUserIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/catatan': typeof CatatanRoute
-  '/evaluasi': typeof EvaluasiRoute
-  '/latihan': typeof LatihanRoute
-  '/panduan': typeof PanduanRoute
-  '/perkembangan': typeof PerkembanganRoute
-  '/pesan': typeof PesanRoute
-  '/profil': typeof ProfilRoute
-  '/reward': typeof RewardRoute
-  '/riwayat': typeof RiwayatRoute
-  '/skrining': typeof SkriningRoute
+  '/_admin': typeof AdminRouteWithChildren
+  '/_auth': typeof AuthRouteWithChildren
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/_auth/catatan': typeof AuthCatatanRoute
+  '/_auth/evaluasi': typeof AuthEvaluasiRoute
+  '/_auth/latihan': typeof AuthLatihanRoute
+  '/_auth/panduan': typeof AuthPanduanRoute
+  '/_auth/perkembangan': typeof AuthPerkembanganRoute
+  '/_auth/pesan': typeof AuthPesanRoute
+  '/_auth/profil': typeof AuthProfilRoute
+  '/_auth/reward': typeof AuthRewardRoute
+  '/_auth/riwayat': typeof AuthRiwayatRoute
+  '/_auth/skrining': typeof AuthSkriningRoute
+  '/_auth/': typeof AuthIndexRoute
+  '/_admin/admin/': typeof AdminAdminIndexRoute
+  '/_admin/admin/users/': typeof AdminAdminUsersRoute
+  '/_admin/admin/users/$userId': typeof AdminAdminUsersUserIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
+    | '/register'
     | '/catatan'
     | '/evaluasi'
     | '/latihan'
@@ -131,9 +190,14 @@ export interface FileRouteTypes {
     | '/reward'
     | '/riwayat'
     | '/skrining'
+    | '/admin/'
+    | '/admin/users/'
+    | '/admin/users/$userId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/login'
+    | '/register'
     | '/catatan'
     | '/evaluasi'
     | '/latihan'
@@ -144,129 +208,218 @@ export interface FileRouteTypes {
     | '/reward'
     | '/riwayat'
     | '/skrining'
+    | '/admin'
+    | '/admin/users'
+    | '/admin/users/$userId'
   id:
     | '__root__'
-    | '/'
-    | '/catatan'
-    | '/evaluasi'
-    | '/latihan'
-    | '/panduan'
-    | '/perkembangan'
-    | '/pesan'
-    | '/profil'
-    | '/reward'
-    | '/riwayat'
-    | '/skrining'
+    | '/_admin'
+    | '/_auth'
+    | '/login'
+    | '/register'
+    | '/_auth/catatan'
+    | '/_auth/evaluasi'
+    | '/_auth/latihan'
+    | '/_auth/panduan'
+    | '/_auth/perkembangan'
+    | '/_auth/pesan'
+    | '/_auth/profil'
+    | '/_auth/reward'
+    | '/_auth/riwayat'
+    | '/_auth/skrining'
+    | '/_auth/'
+    | '/_admin/admin/'
+    | '/_admin/admin/users/'
+    | '/_admin/admin/users/$userId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  CatatanRoute: typeof CatatanRoute
-  EvaluasiRoute: typeof EvaluasiRoute
-  LatihanRoute: typeof LatihanRoute
-  PanduanRoute: typeof PanduanRoute
-  PerkembanganRoute: typeof PerkembanganRoute
-  PesanRoute: typeof PesanRoute
-  ProfilRoute: typeof ProfilRoute
-  RewardRoute: typeof RewardRoute
-  RiwayatRoute: typeof RiwayatRoute
-  SkriningRoute: typeof SkriningRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AuthRoute: typeof AuthRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_admin': {
+      id: '/_admin'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/': {
+      id: '/_auth/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthIndexRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/catatan': {
-      id: '/catatan'
+    '/_auth/catatan': {
+      id: '/_auth/catatan'
       path: '/catatan'
       fullPath: '/catatan'
-      preLoaderRoute: typeof CatatanRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthCatatanRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/evaluasi': {
-      id: '/evaluasi'
+    '/_auth/evaluasi': {
+      id: '/_auth/evaluasi'
       path: '/evaluasi'
       fullPath: '/evaluasi'
-      preLoaderRoute: typeof EvaluasiRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthEvaluasiRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/latihan': {
-      id: '/latihan'
+    '/_auth/latihan': {
+      id: '/_auth/latihan'
       path: '/latihan'
       fullPath: '/latihan'
-      preLoaderRoute: typeof LatihanRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthLatihanRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/panduan': {
-      id: '/panduan'
+    '/_auth/panduan': {
+      id: '/_auth/panduan'
       path: '/panduan'
       fullPath: '/panduan'
-      preLoaderRoute: typeof PanduanRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthPanduanRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/perkembangan': {
-      id: '/perkembangan'
+    '/_auth/perkembangan': {
+      id: '/_auth/perkembangan'
       path: '/perkembangan'
       fullPath: '/perkembangan'
-      preLoaderRoute: typeof PerkembanganRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthPerkembanganRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/pesan': {
-      id: '/pesan'
+    '/_auth/pesan': {
+      id: '/_auth/pesan'
       path: '/pesan'
       fullPath: '/pesan'
-      preLoaderRoute: typeof PesanRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthPesanRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/profil': {
-      id: '/profil'
+    '/_auth/profil': {
+      id: '/_auth/profil'
       path: '/profil'
       fullPath: '/profil'
-      preLoaderRoute: typeof ProfilRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthProfilRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/reward': {
-      id: '/reward'
+    '/_auth/reward': {
+      id: '/_auth/reward'
       path: '/reward'
       fullPath: '/reward'
-      preLoaderRoute: typeof RewardRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthRewardRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/riwayat': {
-      id: '/riwayat'
+    '/_auth/riwayat': {
+      id: '/_auth/riwayat'
       path: '/riwayat'
       fullPath: '/riwayat'
-      preLoaderRoute: typeof RiwayatRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthRiwayatRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/skrining': {
-      id: '/skrining'
+    '/_auth/skrining': {
+      id: '/_auth/skrining'
       path: '/skrining'
       fullPath: '/skrining'
-      preLoaderRoute: typeof SkriningRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthSkriningRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_admin/admin/': {
+      id: '/_admin/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminAdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_admin/admin/users/': {
+      id: '/_admin/admin/users/'
+      path: '/admin/users'
+      fullPath: '/admin/users/'
+      preLoaderRoute: typeof AdminAdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_admin/admin/users/$userId': {
+      id: '/_admin/admin/users/$userId'
+      path: '/admin/users/$userId'
+      fullPath: '/admin/users/$userId'
+      preLoaderRoute: typeof AdminAdminUsersUserIdRouteImport
+      parentRoute: typeof AdminRoute
     }
   }
 }
 
+interface AdminRouteChildren {
+  AdminAdminIndexRoute: typeof AdminAdminIndexRoute
+  AdminAdminUsersRoute: typeof AdminAdminUsersRoute
+  AdminAdminUsersUserIdRoute: typeof AdminAdminUsersUserIdRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAdminIndexRoute: AdminAdminIndexRoute,
+  AdminAdminUsersRoute: AdminAdminUsersRoute,
+  AdminAdminUsersUserIdRoute: AdminAdminUsersUserIdRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface AuthRouteChildren {
+  AuthCatatanRoute: typeof AuthCatatanRoute
+  AuthEvaluasiRoute: typeof AuthEvaluasiRoute
+  AuthLatihanRoute: typeof AuthLatihanRoute
+  AuthPanduanRoute: typeof AuthPanduanRoute
+  AuthPerkembanganRoute: typeof AuthPerkembanganRoute
+  AuthPesanRoute: typeof AuthPesanRoute
+  AuthProfilRoute: typeof AuthProfilRoute
+  AuthRewardRoute: typeof AuthRewardRoute
+  AuthRiwayatRoute: typeof AuthRiwayatRoute
+  AuthSkriningRoute: typeof AuthSkriningRoute
+  AuthIndexRoute: typeof AuthIndexRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthCatatanRoute: AuthCatatanRoute,
+  AuthEvaluasiRoute: AuthEvaluasiRoute,
+  AuthLatihanRoute: AuthLatihanRoute,
+  AuthPanduanRoute: AuthPanduanRoute,
+  AuthPerkembanganRoute: AuthPerkembanganRoute,
+  AuthPesanRoute: AuthPesanRoute,
+  AuthProfilRoute: AuthProfilRoute,
+  AuthRewardRoute: AuthRewardRoute,
+  AuthRiwayatRoute: AuthRiwayatRoute,
+  AuthSkriningRoute: AuthSkriningRoute,
+  AuthIndexRoute: AuthIndexRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  CatatanRoute: CatatanRoute,
-  EvaluasiRoute: EvaluasiRoute,
-  LatihanRoute: LatihanRoute,
-  PanduanRoute: PanduanRoute,
-  PerkembanganRoute: PerkembanganRoute,
-  PesanRoute: PesanRoute,
-  ProfilRoute: ProfilRoute,
-  RewardRoute: RewardRoute,
-  RiwayatRoute: RiwayatRoute,
-  SkriningRoute: SkriningRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AuthRoute: AuthRouteWithChildren,
+  LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

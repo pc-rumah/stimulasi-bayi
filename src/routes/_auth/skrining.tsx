@@ -2,9 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AppShell, BottomNav, Card, PageHeader, PrintButton } from "@/components/AppShell";
 import { kpspStages } from "@/data/kpsp";
-import { ageInMonths, todayKey, useSpeechPro } from "@/lib/store";
+import { ageInMonths, todayKey } from "@/lib/store";
+import { saveScreeningFn, getUserProfileFn } from "@/lib/api";
+import { useEffect } from "react";
 
-export const Route = createFileRoute("/skrining")({
+export const Route = createFileRoute("/_auth/skrining")({
   head: () => ({
     meta: [
       { title: "Skrining Bahasa Anak (KPSP) — SpeechPro" },
@@ -49,17 +51,22 @@ function verdictFor(yes: number, total: number) {
 }
 
 function SkriningPage() {
-  const { state, saveScreening } = useSpeechPro();
-  const months = ageInMonths(state.profile.birthDate);
+  const [birthDate, setBirthDate] = useState("");
+  const months = ageInMonths(birthDate);
   const suggested = useMemo(() => {
     if (months === null) return kpspStages[3]!.age;
     const eligible = kpspStages.filter((s) => s.age <= months);
     return (eligible[eligible.length - 1] ?? kpspStages[0]!).age;
   }, [months]);
 
+  useEffect(() => {
+    getUserProfileFn().then((p) => { if (p?.birthDate) setBirthDate(p.birthDate); });
+  }, []);
+
   const [age, setAge] = useState<number>(suggested);
   const [answers, setAnswers] = useState<Record<string, boolean>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [savingScreening, setSavingScreening] = useState(false);
 
   const stage = kpspStages.find((s) => s.age === age) ?? kpspStages[0]!;
   const yes = stage.questions.filter((q) => answers[q.id]).length;
@@ -152,21 +159,27 @@ function SkriningPage() {
 
           <button
             type="button"
-            disabled={!answeredAll}
-            onClick={() => {
-              setSubmitted(true);
-              saveScreening({
-                id: `${Date.now()}`,
-                date: todayKey(),
-                age,
-                yes,
-                total: stage.questions.length,
-                verdict: result.label,
-              });
+            disabled={!answeredAll || savingScreening}
+            onClick={async () => {
+              setSavingScreening(true);
+              try {
+                await saveScreeningFn({
+                  data: {
+                    date: todayKey(),
+                    age,
+                    yesCount: yes,
+                    totalCount: stage.questions.length,
+                    verdict: result.label,
+                  },
+                });
+                setSubmitted(true);
+              } finally {
+                setSavingScreening(false);
+              }
             }}
             className="brand-gradient no-print mt-5 w-full rounded-full py-3.5 text-sm font-extrabold text-primary-foreground disabled:opacity-50 transition-all hover:opacity-95"
           >
-            {answeredAll ? "Lihat Hasil Skrining" : "Jawab semua pertanyaan dulu"}
+            {savingScreening ? "Menyimpan…" : answeredAll ? "Lihat Hasil Skrining" : "Jawab semua pertanyaan dulu"}
           </button>
         </Card>
 

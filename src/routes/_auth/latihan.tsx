@@ -5,7 +5,7 @@ import { ageBands, bandLabel, type AgeBandId } from "@/data/ages";
 import { latihanSheets } from "@/data/latihan";
 import { ageInMonths, bandForMonths, useSpeechPro } from "@/lib/store";
 
-export const Route = createFileRoute("/latihan")({
+export const Route = createFileRoute("/_auth/latihan")({
   head: () => ({
     meta: [
       { title: "Latihan Kata Harian — SpeechPro" },
