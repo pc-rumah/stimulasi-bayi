@@ -37,8 +37,5 @@ const csrfMiddleware = createCsrfMiddleware({
 });
 
 export const startInstance = createStart(() => ({
-  // jalan di semua request SSR (termasuk server routes, serverFn)
-  requestMiddleware: [csrfMiddleware, errorRequestMiddleware],
-  // kalau mau tambah function-only middleware, bisa pakai:
-  // functionMiddleware: [csrfMiddleware],
+  requestMiddleware: [errorRequestMiddleware],
 }));
