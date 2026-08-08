@@ -1,4 +1,4 @@
-import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/react-start";
+import { createStart, createMiddleware } from "@tanstack/react-start";
 
 import { isRedirect, isNotFound } from "@tanstack/react-router";
 import { renderErrorPage } from "./lib/error-page";
@@ -22,8 +22,8 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
   }
 });
 
-const defaultCsrfMiddleware = createMiddleware().server(async (ctx) => {
-  if ((ctx as any).handlerType === "serverFn") {
+const csrfMiddleware = createMiddleware().server(async (ctx) => {
+  if (ctx.handlerType === "serverFn") {
     const origin = ctx.request.headers.get("Origin");
     if (origin) {
       const requestOrigin = new URL(ctx.request.url).origin;
@@ -32,15 +32,9 @@ const defaultCsrfMiddleware = createMiddleware().server(async (ctx) => {
       }
     }
   }
+
   return await ctx.next();
 });
-
-const csrfMiddleware =
-  typeof createCsrfMiddleware === "function"
-    ? createCsrfMiddleware({
-        filter: (ctx) => ctx.handlerType === "serverFn",
-      })
-    : defaultCsrfMiddleware;
 
 export const startInstance = createStart(() => ({
   requestMiddleware: [errorMiddleware, csrfMiddleware],
