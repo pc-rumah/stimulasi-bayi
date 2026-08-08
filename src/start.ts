@@ -1,4 +1,8 @@
-import { createStart, createMiddleware } from "@tanstack/react-start";
+import {
+  createStart,
+  createMiddleware,
+  createCsrfMiddleware,
+} from "@tanstack/react-start";
 import { isRedirect, isNotFound } from "@tanstack/react-router";
 import { renderErrorPage } from "./lib/error-page";
 
@@ -27,6 +31,10 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
   }
 });
 
+// ✅ WAJIB: CSRF middleware untuk server functions
+const csrfMiddleware = createCsrfMiddleware();
+
 export const startInstance = createStart(() => ({
   requestMiddleware: [errorMiddleware],
+  functionMiddleware: [csrfMiddleware], // ← Tambahkan ini
 }));
