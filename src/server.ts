@@ -9,6 +9,25 @@ type ServerEntry = {
 
 let serverEntryPromise: Promise<ServerEntry> | undefined;
 
+const buildInfo = {
+  commit: process.env["VERCEL_GIT_COMMIT_SHA"] ?? "local",
+  env: process.env["VERCEL_ENV"] ?? "local",
+};
+
+console.log("[ssr] build info", buildInfo);
+
+function withBuildHeaders(response: Response): Response {
+  const headers = new Headers(response.headers);
+  headers.set("x-build-id", buildInfo.commit);
+  headers.set("x-build-env", buildInfo.env);
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 async function getServerEntry(): Promise<ServerEntry> {
   if (!serverEntryPromise) {
     serverEntryPromise = import("@tanstack/react-start/server-entry").then(
@@ -49,7 +68,8 @@ export default {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      const normalized = await normalizeCatastrophicSsrResponse(response);
+      return withBuildHeaders(normalized);
     } catch (error) {
       console.error(error);
       return new Response(renderErrorPage(), {
